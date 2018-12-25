@@ -76,6 +76,8 @@ func handle(w http.ResponseWriter, req *http.Request){
                 data, err = dnsDelete(apiRequest.id)
             }else if apiRequest.method == "list"{
                 data, err = dnsList()
+            }else if apiRequest.method == "purge_all"{
+                data, err = cachePurgeAll()
             }
 
             if err == nil{
@@ -118,6 +120,8 @@ func getParams(req *http.Request)(ApiRequest){
 
     if paramCount == 1{
         if apiRequest.method == "list"{
+            apiRequest.valid = true
+        }else if apiRequest.method == "purge_all"{
             apiRequest.valid = true
         }
     }else if paramCount == 2{

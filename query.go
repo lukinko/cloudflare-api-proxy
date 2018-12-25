@@ -108,6 +108,33 @@ func queryDelete(id string)(CFRespSingle, error){
     err = json.Unmarshal(body, &jsonDecoded)
     return jsonDecoded, err
 }
+//queryPurgeAll
+func queryPurgeAll()(CFRespSingle, error){
+    var jsonDecoded CFRespSingle
+
+    var req CFcache = CFcache{}
+
+    req.PurgeEverything = true
+
+    data, err := json.Marshal(&req)
+
+    if err != nil{
+        return jsonDecoded, err
+    }
+
+    resp, err := cfQuery("POST", "/purge_cache", data)
+
+    if err != nil{
+        return jsonDecoded, err
+    }
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil{
+        return jsonDecoded, err
+    }
+
+    err = json.Unmarshal(body, &jsonDecoded)
+    return jsonDecoded, err
+}
 
 func queryList(page int64)(CFRespList, error){
     path := fmt.Sprintf("/dns_records/?page=%d&per_page=%d", page, cfPerPage)

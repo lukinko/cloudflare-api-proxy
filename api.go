@@ -38,6 +38,10 @@ type CFinfo struct{
     TotalCount int64 `json:"total_count"`
 }
 
+type CFcache struct{
+    PurgeEverything bool `json:"purge_everything"`
+}
+
 func dnsList()([]byte, error){
     resp, err := queryList(1)
 
@@ -98,6 +102,15 @@ func dnsSet(id, content string)([]byte, error){
 
 func dnsDelete(id string)([]byte, error){
     resp, err := queryDelete(id)
+    if err != nil{
+        return nil, err
+    }
+
+    return json.MarshalIndent(&resp, "", "    ")
+}
+
+func cachePurgeAll()([]byte, error){
+    resp, err := queryPurgeAll()
     if err != nil{
         return nil, err
     }
